@@ -28,6 +28,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import br.edu.utfpr.calculaimc_compose_pos2026_1.model.ImcViewModel
 import br.edu.utfpr.calculaimc_compose_pos2026_1.ui.theme.CalculaIMCComposepos20261Theme
 
@@ -37,10 +40,20 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             CalculaIMCComposepos20261Theme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    CalculaIMCScreen(
-                        modifier = Modifier.padding(innerPadding)
-                    )
+
+                val navController = rememberNavController()
+
+                NavHost( navController = navController, startDestination = "home") {
+                    composable("home") {
+                        CalculaIMCScreen(
+                            onNavigateToDeveloper = {
+                                navController.navigate("developer")
+                            }
+                        )
+                    }
+                    composable("developer") {
+                        DeveloperScreen()
+                    }
                 }
             }
         }
@@ -50,7 +63,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun CalculaIMCScreen(
     modifier: Modifier = Modifier,
-    viewModel: ImcViewModel = viewModel()
+    viewModel: ImcViewModel = viewModel(),
+    onNavigateToDeveloper: () -> Unit
 ) {
 
     val focusRequester = remember { FocusRequester() }
@@ -98,7 +112,7 @@ fun CalculaIMCScreen(
         )
 
         Button(
-            onClick = {},
+            onClick = onNavigateToDeveloper,
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Sobre o Desenvolvedor")
@@ -211,6 +225,6 @@ private fun PanelResultPreview() {
 @Composable
 fun CalculaIMCScreenPreview() {
     CalculaIMCComposepos20261Theme {
-        CalculaIMCScreen()
+        CalculaIMCScreen( onNavigateToDeveloper = {} )
     }
 }
