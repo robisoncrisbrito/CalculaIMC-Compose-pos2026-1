@@ -5,10 +5,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -16,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
@@ -42,8 +45,20 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun CalculaIMCScreen( modifier: Modifier = Modifier) {
 
-    var peso by remember { mutableStateOf( "" ) }
-    var altura by remember { mutableStateOf( "" ) }
+    var peso by rememberSaveable { mutableStateOf( "" ) }
+    var altura by rememberSaveable { mutableStateOf( "" ) }
+    var resultado by rememberSaveable { mutableStateOf( "0.00" ) }
+
+    val calcularIMC = {
+        val pesoDouble = peso.toDoubleOrNull() ?: 0.0
+        val alturaDouble = altura.toDoubleOrNull() ?: 0.0
+
+        if ( pesoDouble != 0.0 && alturaDouble != 0.0 ) {
+            val imc = pesoDouble / (alturaDouble * alturaDouble)
+            resultado = "%.2f".format(imc)
+        }
+    }
+
 
     Column(
         modifier = modifier
@@ -55,7 +70,9 @@ fun CalculaIMCScreen( modifier: Modifier = Modifier) {
             label = {
                 Text( "Peso em Kg" )
             },
-            modifier = Modifier.fillMaxWidth().padding(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )
 
@@ -78,9 +95,29 @@ fun CalculaIMCScreen( modifier: Modifier = Modifier) {
         )
 
         Text(
-            text = "0.00",
+            text = resultado,
             modifier = Modifier.padding(8.dp)
         )
+
+        Row {
+            Button(
+                onClick = {calcularIMC()},
+                modifier = Modifier
+                    .padding(8.dp)
+                    .weight(1f)
+            ) {
+                Text("Calcular")
+            }
+
+            Button(
+                onClick = { peso = ""; altura = ""; resultado = "0.00"},
+                modifier = Modifier
+                    .padding(8.dp)
+                    .weight(1f)
+            ) {
+                Text("Limpar")
+            }
+        }
 
 
 
