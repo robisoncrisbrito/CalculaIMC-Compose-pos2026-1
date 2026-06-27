@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import br.edu.utfpr.calculaimc_compose_pos2026_1.entity.ImcRecord
 
 class ImcViewModel: ViewModel() {
 
@@ -16,6 +17,10 @@ class ImcViewModel: ViewModel() {
 
     var resultado by mutableStateOf( "0.00" )
         private set
+
+    var historico by mutableStateOf( listOf<ImcRecord>() )
+        private set
+
 
     fun onPesoChange(novoPeso: String) {
         peso = novoPeso
@@ -32,9 +37,10 @@ class ImcViewModel: ViewModel() {
         if ( pesoDouble != 0.0 && alturaDouble != 0.0 ) {
             val imc = pesoDouble / (alturaDouble * alturaDouble)
             resultado = "%.2f".format(imc)
+
+            val imcRecord = ImcRecord(pesoDouble, alturaDouble, resultado)
+            historico = listOf(imcRecord) + historico
         }
-
-
     }
 
     fun limparTela() {
