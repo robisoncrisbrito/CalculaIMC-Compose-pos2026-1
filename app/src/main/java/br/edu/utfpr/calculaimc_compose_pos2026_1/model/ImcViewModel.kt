@@ -33,6 +33,8 @@ class ImcViewModel: ViewModel() {
             val imc = pesoDouble / (alturaDouble * alturaDouble)
             resultado = "%.2f".format(imc)
         }
+
+
     }
 
     fun limparTela() {
@@ -40,9 +42,5 @@ class ImcViewModel: ViewModel() {
         altura = ""
         resultado = "0.00"
     }
-
-
-
-
 
 }
