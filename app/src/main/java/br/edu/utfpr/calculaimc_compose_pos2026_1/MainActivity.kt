@@ -96,6 +96,13 @@ fun CalculaIMCScreen(
                 focusRequester.requestFocus()
             }
         )
+
+        Button(
+            onClick = {},
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Sobre o Desenvolvedor")
+        }
     }
 }
 
@@ -151,8 +158,34 @@ private fun PanelButtons(
             Text("Limpar")
         }
     }
-
 }
+
+@Composable
+fun DeveloperScreen() {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "Desenvolvido por"
+        )
+        Text(
+            text = "posmoveis-pb@utfpr.edu.br",
+            style = MaterialTheme.typography.headlineMedium
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun DeveloperScreenPreview() {
+    CalculaIMCComposepos20261Theme {
+        DeveloperScreen()
+    }
+}
+
+
 
 @Preview
 @Composable
